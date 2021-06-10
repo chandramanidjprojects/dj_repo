@@ -1,0 +1,115 @@
+<script type="text/javascript">
+$('#atag').click(function (){
+  alert($(this).attr('data-sid'))
+  
+  })
+$(function(){
+     $('#tbody').on('click','.btn-like',function(){
+        let id=$(this).attr('data-sid')
+        mythis=this;
+        mydata={sid:id}
+        $.ajax({
+               url:"{% url 'like' %}",
+               method:'GET',
+               data:mydata,
+               success:function(data){
+                     
+                     $(mythis).next().text(data.likes)
+                    }
+               })
+        })
+    })
+
+//edit data
+$('#tbody').on('click','.btn-edit',function(){
+      let id=$(this).attr('data-sid')
+      let csr=$("input[name='csrfmiddlewaretoken']").val()
+      let stuid=$('stuid').val()
+      mydata={sid:id,stuid:stuid,csrfmiddlewaretoken:csr}
+      $.ajax({
+             url:"{% url 'edit' %}",
+             method:'POST',
+             data:mydata,
+             success: function (data){
+                let x=data.dict
+                $('#id_name').val(x.name)
+                $('#id_marks').val(x.marks)
+                $('#stuid').val(x.id)
+                }
+             });//end of ajax
+   });
+  //save data
+  $('#savebtn').on('click',function(){
+     output='';
+     let n=$('#id_name').val()
+     
+     let m=$('#id_marks').val()
+     let csr=$("input[name='csrfmiddlewaretoken']").val()
+     let sid=$('#stuid').val()
+     
+     if(n==''){
+         alert('name should not leave')
+         }
+     else if(m==''){
+           alert('marks should not empty')
+           }    
+     else{
+      mydata={s:sid,name:n,marks:m,csrfmiddlewaretoken:csr}
+      
+      $.ajax({
+         url:"{% url 'save' %}",      
+         method:'POST',
+         data:mydata,
+         success:function(data){
+           var x=data.std_data
+           for(var d=0;d<x.length;d++){
+             output+="<tr><td>"
+                     + x[d].id + "</td><td>"
+                      + x[d].name + "</td><td>"
+                      + x[d].marks + "</td><td>"
+                      + "<input class='btn-edit' data-sid=" +x[d].id+ " type='button' value='edit'>"+
+                      "</td><td><input class='btn-del' data-sid="+x[d].id+" type='button' value='delete'>"
+                      +"</td><td><button type='button' class='btn-like btn btn-lg btn-primary bg-success' data-sid="+x[d].id+">"+'like'+
+                       "</button><span>"
+                        +x[d].marks
+                      +"</span></td>"
+                      +"</tr>"
+                }
+               $('#tbody').html(output)   
+               $('#stuid').val('')          
+               $('#myspan').text(x.length)
+              $('form')[0].reset()                 
+             }//success end
+           });//end of ajax
+          }// else end      
+  });//end of save data 
+  //delete data
+$('#tbody').on('click','.btn-del',function(){
+    output=''
+    let id=$(this).attr('data-sid')   
+    let csr=$("input[name='csrfmiddlewaretoken']").val()
+    mydata={sid:id,csrfmiddlewaretoken:csr}
+    $.ajax({
+          url:"{% url 'delete' %}",
+          method:'POST',
+          data:mydata,
+          success:function(data){
+                if(data.status===1){
+                  x=data.stu_data
+                  for(let i=0;i<x.length;i++){
+                       output+="<tr><td>"
+                               +x[i].id+"</td><td>"
+                               +x[i].name+"</td><td>"
+                               +x[i].marks+"</td><td>"+
+                               "<input class='btn-edit' data-sid=" +x[i].id+ " type='button' value='edit'>"+
+ "</td><td><input class='btn-del' data-sid=" +x[i].id+ " type='button' value='delete'>"+
+"</td><td><button class='btn btn-primary btn-lg bg-success btn-like' data-sid="+x[i].id+">"+'like'+"</button><span>"+x[i].marks+"</span></td>"
+ +"</tr>"
+                       }
+                  $('#tbody').html(output)     
+                  $('#myspan').text(x.length)
+                  }//if end
+                }//success end
+          })//ajax end
+   })
+</script>

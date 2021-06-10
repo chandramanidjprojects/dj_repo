@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+<meta name="viewport"content="width=divice-width">
+<title></title>
+</head>
+<style type="text/css">
+*{
+   font-size:62px;
+  }
+.main{background-color:indigo;}  
+.headline{color:red;}
+.cool1{color:green;}  
+.cool2{color:violet;}  
+</style>
+<body>
+<div id="page"> 
+<h1 id="header">List</h1> 
+<h2>Buy groceries</h2> 
+
+<ul> 
+   <li id="one" class="hot"><em>fresh</em> figs</li> 
+   <li id="two" class="hot">pine nuts</li> 
+   <li id="three" class="hot">honey</li> 
+   <li id="four">balsamic veginar</li> 
+</ul>
+</div>
+<script type="text/javascript"src="{% static 'js/jquery.js' %}"></script>
+<script type="text/javascript">
+var date=new Date()
+alert(date.toString())
+</script>
+</body>
+</html>
