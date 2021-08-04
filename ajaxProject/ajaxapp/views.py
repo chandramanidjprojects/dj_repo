@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from .models import Student
 from .forms import StudentForm
 from django.db.models import Q,Sum,Avg,Min,Max,Count
-from django.views.decorators.csrf import csrf_exempt
+#from django.views.decorators.csrf import csrf_exempt
 
 def like_request(request):
    stuid=request.GET.get('sid')
